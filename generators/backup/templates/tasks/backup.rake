@@ -3,7 +3,7 @@ namespace :backup do
   desc "Run Backup Procedure."
   task :run => :environment do
     puts "Running: #{ENV['trigger']}."
-    Backup::Setup.new(ENV['trigger'], @backup_procedures).initialize_adapter
+    Backup::Setup.new(ENV['trigger'], @backup_procedures).initialize_adapter.backup
   end
   
   desc "Finds backup records by trigger"
@@ -68,4 +68,11 @@ namespace :backup do
     end
   end
   
+end
+
+namespace :restore do
+  task :run => :environment do
+    puts "Running: #{ENV['trigger']}."
+    Backup::Setup.new(ENV['trigger'], @backup_procedures).initialize_adapter.restore(ENV['filename'])
+  end
 end

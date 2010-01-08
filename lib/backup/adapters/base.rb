@@ -16,6 +16,7 @@ module Backup
       #
       # It is important that, whatever the final filename of the file will be, that :final_file will contain it.
       attr_accessor :performed_file, :compressed_file, :encrypted_file, :final_file
+      attr_accessor :restore_file
 
       # Initializes the Backup Process
       # 
@@ -42,15 +43,30 @@ module Backup
         self.compressed_file  = "#{performed_file}.gz"
         self.encrypted_file   = "#{compressed_file}.enc"
         self.final_file       = compressed_file
-
+      end
+      
+      def backup
         begin
           create_tmp_folder
           load_settings # if respond_to?(:load_settings)
-          perform
+          perform_backup
           encrypt
           store
           record
           notify
+        ensure
+          remove_tmp_files
+        end
+      end
+      
+      def restore(restore_file)
+        self.restore_file = restore_file
+        begin
+          create_tmp_folder
+          load_settings
+          pull
+          decrypt
+          perform_restore
         ensure
           remove_tmp_files
         end
@@ -79,9 +95,21 @@ module Backup
         end
       end
       
+      def decrypt
+        if encrypt_with_password.is_a?(String)
+          log system_messages[:decrypting]
+          run "openssl enc -des-cbc -d -in #{File.join(tmp_path, restore_file)} -out #{File.join(tmp_path, restore_file).gsub('.enc', '')} -k #{encrypt_with_password}"
+          self.restore_file = restore_file.gsub(/\.enc$/, '')
+        end
+      end
+      
       # Initializes the storing process
       def store
-        procedure.initialize_storage(self)
+        procedure.initialize_storage(self).store
+      end
+      
+      def pull
+        procedure.initialize_storage(self).pull
       end
       
       # Records data on every individual file to the database
@@ -102,6 +130,7 @@ module Backup
         { :compressing  => "Compressing backup..",
           :archiving    => "Archiving backup..",
           :encrypting   => "Encrypting backup..",
+          :decrypting   => "Decrypting backup..",
           :mysqldump    => "Creating MySQL dump..",
           :pgdump       => "Creating PostgreSQL dump..",
           :sqlite       => "Copying and compressing SQLite database..",

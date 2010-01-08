@@ -14,7 +14,7 @@ optparse = OptionParser.new do |opts|
   opts.on('-r', '--run [trigger]', "Runs backup process by trigger") do |trigger|
     confirm_configuration_file_existence
     puts "Running: #{trigger}."
-    Backup::Setup.new(trigger, @backup_procedures).initialize_adapter
+    Backup::Setup.new(trigger, @backup_procedures).initialize_adapter.backup
   end
   
   opts.on('-f', '--find [trigger]', "Finds backup records by trigger") do |trigger|
