@@ -7,7 +7,7 @@ module Backup
       private
 
         # Execute any given commands, then archive and compress every folder/file
-        def perform
+        def perform_backup
           execute_commands
           targz
         end

@@ -7,7 +7,7 @@ module Backup
       private
 
         # Archives and Compresses all files
-        def perform
+        def perform_backup
           log system_messages[:archiving]; log system_messages[:compressing]
           run "tar -czf #{File.join(tmp_path, compressed_file)} #{exclude_files} #{tar_files}"
         end

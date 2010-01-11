@@ -7,7 +7,7 @@ module Backup
       private
 
         # Dumps and Compresses the MySQL file 
-        def perform
+        def perform_backup
           log system_messages[:mysqldump]; log system_messages[:compressing]
           run "#{mysqldump} -u #{user} --password='#{password}' #{options} #{additional_options} #{database} #{tables_to_skip} | gzip -f --best > #{File.join(tmp_path, compressed_file)}"
         end
@@ -19,6 +19,10 @@ module Backup
           cmd
         end
         
+        def perform_restore
+          run "mysql -u #{user} --password='#{password}' #{options} #{database} < #{File.join(tmp_path, restore_file)}"
+        end
+
         def performed_file_extension
           ".sql"
         end

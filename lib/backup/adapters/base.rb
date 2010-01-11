@@ -81,6 +81,10 @@ module Backup
       def load_settings
       end
 
+      def perform_restore
+        log "This adapter does not support restore operation!"
+      end
+
       # Removes the files inside the temporary folder
       def remove_tmp_files
         run "rm #{File.join(tmp_path, '*')}"
