@@ -10,9 +10,12 @@ module Backup
           send("#{method}=", adapter.procedure.get_storage_configuration.attributes[method])
         end
         
-        final_file = adapter.final_file
-        tmp_path   = adapter.tmp_path
-        
+        self.final_file = adapter.final_file
+        self.tmp_path   = adapter.tmp_path
+        self.restore_file = adapter.restore_file
+      end
+
+      def store
         Net::SFTP.start(ip, user, :password => password) do |sftp|
           begin
             puts "Storing \"#{final_file}\" to path \"#{path}\" on remote server (#{ip})."
@@ -22,6 +25,10 @@ module Backup
             exit
           end
         end
+      end
+
+      def pull
+        # TODO implement!
       end
       
     end

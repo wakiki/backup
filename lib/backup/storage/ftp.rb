@@ -10,9 +10,12 @@ module Backup
           send("#{method}=", adapter.procedure.get_storage_configuration.attributes[method])
         end
         
-        final_file = adapter.final_file
-        tmp_path   = adapter.tmp_path
-        
+        self.final_file = adapter.final_file
+        self.tmp_path   = adapter.tmp_path
+        self.restore_file = adapter.restore_file
+      end
+
+      def store
         Net::FTP.open(ip, user, password) do |ftp|
           begin
             ftp.chdir(path)
@@ -29,6 +32,10 @@ module Backup
             exit
           end
         end
+      end
+
+      def pull
+        # TODO implement!
       end
       
     end
