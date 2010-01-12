@@ -2,7 +2,7 @@ module Backup
   module Storage
     class FTP
       
-      attr_accessor :user, :password, :ip, :path, :tmp_path, :final_file
+      attr_accessor :user, :password, :ip, :path, :tmp_path, :final_file, :restore_file
       
       # Stores the backup file on the remote server using FTP
       def initialize(adapter)
