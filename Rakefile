@@ -4,7 +4,7 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "backup"
+    gem.name = "backup-wakiki"
     gem.summary = %Q{Backup is a Ruby Gem that simplifies making backups for databases, files and folders.}
     gem.description = %Q{
                             Backup is a Ruby Gem written for Unix and Rails environments. It can be used both with and without the
