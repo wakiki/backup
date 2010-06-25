@@ -32,6 +32,8 @@ Gem::Specification.new do |s|
      "README.textile",
      "Rakefile",
      "VERSION",
+     "backup-2.3.1.gem",
+     "backup-wakiki.gemspec",
      "backup.gemspec",
      "bin/backup",
      "generators/backup/backup_generator.rb",
